@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class	name="com.help.information.D_record" table="d_record">
+		<id name="recordid">
+			<generator class="native" />
+		</id>
+		<property name="infoid" />
+		<property name="userid" />
+		<property name="buycount" />
+		<property name="address" />
+		<property name="buytime" />
+		<property name="result" />
+		<property name="state" />
+	</class>
+</hibernate-mapping>

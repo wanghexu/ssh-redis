@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"        
+    xmlns:mvc="http://www.springframework.org/schema/mvc"     
+    xmlns:tx="http://www.springframework.org/schema/tx"  
+    xmlns:aop="http://www.springframework.org/schema/aop"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"              
+    xsi:schemaLocation="                                               
+            http://www.springframework.org/schema/beans    
+            http://www.springframework.org/schema/beans/spring-beans.xsd    
+            http://www.springframework.org/schema/context     
+            http://www.springframework.org/schema/context/spring-context.xsd    
+            http://www.springframework.org/schema/mvc    
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+            http://www.springframework.org/schema/tx   
+            http://www.springframework.org/schema/tx/spring-tx.xsd  
+            http://www.springframework.org/schema/aop  
+            http://www.springframework.org/schema/aop/spring-aop.xsd "  
+    default-autowire="byName">  
+	
+	<!-- 导入jdbc.properites外部文件 -->
+	<!-- <context:property-placeholder location="classpath:jdbc.properties"/> -->
+	    <!-- 加载配置文件 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">  
+	        <list>  
+	            <value>classpath:*.properties</value>	    
+	        </list>  
+	    </property>  
+	    <property name="ignoreUnresolvablePlaceholders" value="true" />   
+	</bean>
+		
+	<!-- 配置datasource -->
+	<!-- 配置连接池  一个是传统的jdbc，一个时用到了c3p0-->
+	<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClass" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean> -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<!-- 配置factorybean 配置会话工厂 -->
+	<!-- 配置Hibernate相关属性 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	<!-- 注入连接池 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 配置Hibernate属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				
+				<!-- 自动建表 -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		
+		<!-- 加载Hibernate配置文件 -->
+		<property name="mappingLocations">
+			<list>
+		      <value>classpath:com/help/information/*.hbm.xml</value>			
+			</list>
+		</property>	
+	</bean>
+	
+	<!-- 注解自动读取事务管理器 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- 公用的配置 -->
+	<!-- abstract="true" 表示是一个抽象的bean，不会被实例化; 可以被其他bean继承，就可以省略父bean定义多的属性 -->
+	<bean id="BaseDao" abstract="true">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	
+	
+	<!-- 配置dao层的bean -->
+    	<bean id="userdao" class="com.help.dao.Userdao">
+			<property name="sessionFactory" ref="sessionFactory"></property>
+		</bean>
+		
+		<bean id="activityDao" class="com.help.dao.ActivityDao"></bean>
+		
+		
+	
+	
+	
+	<!-- 配置service层的bean -->
+	<bean id="userservice" class="com.help.service.Userservice">
+		<property name="userdao" ref="userdao" />
+	</bean>
+	
+	<bean id="activityservice" class="com.help.service.ActivityService">
+		<property name="activityDao" ref="activityDao" />
+	</bean>
+	
+	
+	
+	
+	<!-- 配置action的bean -->      
+    <bean name="userAction" class="com.help.action.UserAction" scope="prototype">
+		<property name="userservice" ref="userservice" />
+	</bean>
+	
+	<bean name="activityAction" class="com.help.action.ActivityAction" scope="prototype">
+		<property name="activityservice" ref="activityservice" />
+	</bean>
+		
+	   <bean name="optimisticLockAction" class="com.help.action.OptimisticLockAction" scope="prototype">
+
+	</bean>
+	
+		<!-- 引入redis配置 -->
+       <import resource="classpath:spring-reids.xml"/> 
+</beans>  

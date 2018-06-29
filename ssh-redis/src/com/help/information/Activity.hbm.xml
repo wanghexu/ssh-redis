@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class	name="com.help.information.Activity" table="activity">
+		<id name="activityid">
+			<generator class="native" />
+		</id>
+		<property name="title" />
+		<property name="content" />
+		<property name="price" />
+		<property name="photourl" />
+		<property name="intime" />
+		<property name="starttime" />
+		<property name="state" />
+		<property name="hot" />
+		<property name="scenery" />
+		<property name="trip" />
+		<property name="pricedetail" />
+		<property name="pricedetail2" />
+		<property name="typeid" />
+		
+	</class>
+</hibernate-mapping>

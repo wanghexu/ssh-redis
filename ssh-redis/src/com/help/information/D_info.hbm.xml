@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class	name="com.help.information.D_info" table="d_info">
+		<id name="infoid">
+			<generator class="native" />
+		</id>
+		<property name="confid" />
+		<property name="title" />
+		<property name="cover" />
+		<property name="content" />
+		<property name="starttime" />
+		<property name="finishedtime" />
+		<property name="period" />
+		<property name="portionnum" />
+		<property name="totalportion" />
+		<property name="prize" />
+		<property name="state" />
+	</class>
+	
+</hibernate-mapping>

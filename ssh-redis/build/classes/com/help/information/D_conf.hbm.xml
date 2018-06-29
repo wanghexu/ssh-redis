@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class	name="com.help.information.D_conf" table="d_conf">
+		<id name="confid">
+			<generator class="native" />
+		</id>
+		<property name="title" />
+		<property name="cover" />
+		<property name="content" />
+		<property name="currency" />
+		<property name="portionnum" />
+		<property name="totalportion" />
+		<property name="prizeid" />
+		<property name="prizetype" />
+		<property name="prizenum" />
+		<property name="state" />
+	</class>
+</hibernate-mapping>
